@@ -24,6 +24,8 @@ async def upload_pdf(file: UploadFile = File(...)):
         content = await file.read()
         f.write(content)
 
+    text = load_pdf(str(file_path))
+
     return {
         "filename": file.filename,
         "saved_to": str(file_path), 
