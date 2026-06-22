@@ -1,10 +1,15 @@
 from fastapi import APIRouter, UploadFile, File
 from pathlib import Path
+import sys
+print(sys.path)
+from src.pdf_loader import load_pdf
 
 router = APIRouter()
 
 UPLOAD_DIR = Path("data/uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+
 
 
 @router.post("/upload")
@@ -21,5 +26,7 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     return {
         "filename": file.filename,
-        "saved_to": str(file_path)
+        "saved_to": str(file_path), 
+        "characters": len(text),
+        "preview": text[:500]
     }
