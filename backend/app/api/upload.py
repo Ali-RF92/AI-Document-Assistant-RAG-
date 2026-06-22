@@ -4,6 +4,8 @@ import sys
 print(sys.path)
 from src.pdf_loader import load_pdf
 
+from src.text_splitter import split_text 
+
 router = APIRouter()
 
 UPLOAD_DIR = Path("data/uploads")
@@ -25,10 +27,12 @@ async def upload_pdf(file: UploadFile = File(...)):
         f.write(content)
 
     text = load_pdf(str(file_path))
+    chunks = split_text(text)
 
     return {
         "filename": file.filename,
         "saved_to": str(file_path), 
         "characters": len(text),
-        "preview": text[:500]
+        "preview": chunks[0],
+        "chunks": len(chunks)
     }
